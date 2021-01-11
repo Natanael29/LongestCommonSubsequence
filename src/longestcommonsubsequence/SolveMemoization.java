@@ -36,7 +36,6 @@ public class SolveMemoization {
                 }
             }
         }
-        
         return taken;
     }
     
@@ -57,7 +56,6 @@ public class SolveMemoization {
                         auxSolveMemoization(xsequence, ysequence, s1Length - 1, s2Length, mem)));
             }
         }
-        
         return mem.get(key);
     }
     
