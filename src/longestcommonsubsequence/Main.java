@@ -1,6 +1,5 @@
 package longestcommonsubsequence;
 
-import java.util.List;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -12,19 +11,22 @@ public class Main {
 
     public static void main(String[] args) {
         Namespace arguments = parseArguments(args);
-        if (arguments.getString("file") != null) {
-            FileReader reader = new FileReader();
-            String fileName = arguments.getString("file");
-            String[] sequences = reader.read(fileName);
-            processArguments(arguments, sequences, reader.getXlength(), reader.getYlength());
-        } else if (arguments.getString("directory") != null) {
-            String pathName = arguments.getString("directory");
-            String[] fileNames = PathReader.read(arguments.get("directory"));
-            for (int i = 0; i < fileNames.length; i++) {
-                System.out.print(pathName + "/" + fileNames[i] + "\t");
+        if (arguments != null) {
+            if (arguments.getString("file") != null) {
                 FileReader reader = new FileReader();
-                String[] sequences = reader.read(fileNames[i]);
+                String fileName = arguments.getString("file");
+                System.out.print(fileName + "\t");
+                String[] sequences = reader.read(fileName);
                 processArguments(arguments, sequences, reader.getXlength(), reader.getYlength());
+            } else if (arguments.getString("directory") != null) {
+                String pathName = arguments.getString("directory");
+                String[] fileNames = PathReader.read(arguments.get("directory"));
+                for (int i = 0; i < fileNames.length; i++) {
+                    System.out.print(pathName + "/" + fileNames[i] + "\t");
+                    FileReader reader = new FileReader();
+                    String[] sequences = reader.read(pathName + "/" + fileNames[i]);
+                    processArguments(arguments, sequences, reader.getXlength(), reader.getYlength());
+                }
             }
         }
     }
@@ -61,19 +63,18 @@ public class Main {
             }
             
             if (arguments.getBoolean("time")) {
-                message += (System.currentTimeMillis()-timeStart) + "ms";
+                message += (System.currentTimeMillis()-timeStart) + "ms" + "\t";
             }
             
             if (arguments.getBoolean("display_taken")) {
-                message += "[" + result + "]";
+                message += "[" + result + "]" + "\t";
             }
             System.out.println(message);
-            
         }
     }
     
     private static Namespace parseArguments(String[] args) {
-        ArgumentParser parser = ArgumentParsers.newFor("main").build();
+        ArgumentParser parser = ArgumentParsers.newFor("Main").build();
         MutuallyExclusiveGroup group = parser.addMutuallyExclusiveGroup();
         group.addArgument("-d", "--directory")
                 .nargs("?")
@@ -91,7 +92,7 @@ public class Main {
                 .help("Display time")
                 .action(Arguments.storeTrue());
         parser.addArgument("-dt", "--display_taken")
-                .help("Display identifier of taken items")
+                .help("Display taken characters")
                 .action(Arguments.storeTrue());
         parser.addArgument("-c", "--check")
                 .help("Check both results(Memoization and Tabulation) are the same")

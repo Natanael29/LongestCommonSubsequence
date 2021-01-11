@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileReader {
     int xlength;
@@ -14,8 +12,6 @@ public class FileReader {
     public String[] read(String fileName) {
         String[] sequences = new String[2];
         String[] elements;
-        xlength = 0;
-        ylength = 0;
         try {
             BufferedReader reader = new BufferedReader(new java.io.FileReader(new File(fileName)));
             String firstLine = reader.readLine();
@@ -30,9 +26,9 @@ public class FileReader {
                 }
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("Error ItemReader::read (FileNotFound) " + ex.getMessage());
+            System.out.println("Error FileReader::read (FileNotFound) " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("Error ItemReader::read (IO) " + ex.getMessage());
+            System.out.println("Error FileReader::read (IO) " + ex.getMessage());
         }
         
         return sequences;
